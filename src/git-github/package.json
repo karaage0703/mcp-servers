@@ -1,0 +1,50 @@
+{
+  "name": "git-github",
+  "version": "0.1.0",
+  "description": "MCP server for Git and GitHub operations",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "prepublishOnly": "npm run build",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "git",
+    "github",
+    "claude",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "@octokit/rest": "^21.1.1",
+    "simple-git": "^3.27.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.11",
+    "typescript": "^5.8.2"
+  },
+  "bin": {
+    "git-github": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karaage0703/mcp-servers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/karaage0703/mcp-servers/issues"
+  },
+  "homepage": "https://github.com/karaage0703/mcp-servers/tree/main/src/git-github#readme"
+}
