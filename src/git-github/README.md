@@ -14,6 +14,7 @@ Git と GitHub 操作のための Model Context Protocol (MCP) サーバー
 - ファイルのステージング追加 (`git add`)
 - 変更のコミット (`git commit`)
 - リモートへのプッシュ (`git push`)
+- リモートリポジトリから最新の情報を取得 (`git fetch`)
 - ファイルの移動 (`git mv`)
 - ファイルの削除 (`git rm`)
 - ブランチの作成 (`git checkout -b`)
@@ -105,6 +106,18 @@ arguments: {
 ```
 
 ```
+リモートリポジトリから最新の情報を取得してください。
+
+use_mcp_tool
+server_name: git-github
+tool_name: git_fetch
+arguments: {
+  "path": "/path/to/your/repo",
+  "remote": "origin"
+}
+```
+
+```
 Pull Request を作成してください。
 
 use_mcp_tool
@@ -150,7 +163,3 @@ GITHUB_TOKEN=your-token-here npm start
 ## ライセンス
 
 MIT
-
-## 貢献
-
-バグ報告や機能リクエストは GitHub Issues で受け付けています。プルリクエストも歓迎します！

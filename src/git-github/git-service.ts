@@ -374,4 +374,38 @@ export class GitService {
       throw new Error(`Failed to set upstream branch: ${error.message}`);
     }
   }
+
+  /**
+   * リモートリポジトリから最新の情報を取得します (git fetch)
+   * @param repoPath リポジトリのパス
+   * @param remote リモート名（デフォルト: すべてのリモート）
+   * @param branch ブランチ名（デフォルト: すべてのブランチ）
+   * @returns 操作結果
+   */
+  async fetch(repoPath: string, remote?: string, branch?: string) {
+    try {
+      const resolvedPath = this.resolveRepoPath(repoPath);
+      const git = simpleGit(resolvedPath);
+
+      // fetchオプションを設定
+      const options: string[] = [];
+      if (remote) {
+        options.push(remote);
+      }
+      if (branch) {
+        options.push(branch);
+      }
+
+      // git fetchを実行
+      const result = await git.fetch(options);
+
+      return {
+        success: true,
+        message: `Successfully fetched from remote${remote ? ` ${remote}` : ''}${branch ? ` branch ${branch}` : ''}`,
+        result: result,
+      };
+    } catch (error: any) {
+      throw new Error(`Git fetch error: ${error.message}`);
+    }
+  }
 }

@@ -250,6 +250,28 @@ class GitGitHubServer {
             required: ["path", "branch"],
           },
         },
+        {
+          name: "git_fetch",
+          description: "リモートリポジトリから最新の情報を取得します (git fetch)",
+          inputSchema: {
+            type: "object",
+            properties: {
+              path: {
+                type: "string",
+                description: "リポジトリのパス",
+              },
+              remote: {
+                type: "string",
+                description: "リモート名（指定しない場合はすべてのリモート）",
+              },
+              branch: {
+                type: "string",
+                description: "ブランチ名（指定しない場合はすべてのブランチ）",
+              },
+            },
+            required: ["path"],
+          },
+        },
       ];
 
       // GitHub トークンが設定されている場合のみ GitHub 操作ツールを追加
@@ -447,6 +469,8 @@ class GitGitHubServer {
             return this.handleGitRemote(request.params.arguments);
           case "git_set_upstream":
             return this.handleGitSetUpstream(request.params.arguments);
+          case "git_fetch":
+            return this.handleGitFetch(request.params.arguments);
 
           // GitHub 操作ツール
           case "github_create_pr":
@@ -1195,8 +1219,38 @@ class GitGitHubServer {
       throw new Error(`Failed to set upstream branch: ${error.message}`);
     }
   }
+/**
+ * リモートリポジトリから最新の情報を取得するハンドラー (git fetch)
+ */
+private async handleGitFetch(args: any) {
+  try {
+    // パスの検証
+    this.validatePath(args);
 
-  /**
+    try {
+      const result = await this.gitService.fetch(
+        args.path,
+        args.remote,
+        args.branch
+      );
+      return {
+        content: [
+          {
+            type: "text",
+            text: result.message,
+          },
+        ],
+      };
+    } catch (gitError: any) {
+      this.handleGitError(gitError, args.path);
+    }
+  } catch (error: any) {
+    throw new Error(`Git fetch error: ${error.message}`);
+  }
+}
+
+/**
+ * MCP サーバーを実行します
    * MCP サーバーを実行します
    */
   async run() {
